@@ -10,11 +10,11 @@ const { ipcRenderer } = window;
 class GlobalStore {
   networks: Network[] = [];
   currentNetworks: Network[] = [];
-  network: Network | undefined;
+  network?: Network;
   _bonjourServices: Map<string, RemoteService> = new Map();
   selectedDevice: Device | null = null;
   wifiModalOpen = false;
-  wifiPassword: string | undefined;
+  wifiPassword?: string;
   scanningWifi = false;
   connectingDevice: Promise<void> | null = null;
   deviceInfo = new Map();
@@ -93,11 +93,22 @@ class GlobalStore {
     release: Release;
     asset: Asset | undefined;
   }) {
-    const assetUrl = asset?.browser_download_url || release.tarball_url;
+    if (!device.service) return;
+    let assetUrl = asset?.browser_download_url || release.tarball_url;
     const deviceUrl = `http://${device.service.host}`;
+    let mimeType;
+    if (asset) {
+      mimeType = asset.content_type || "application/octet-stream";
+    } else {
+      mimeType = "application/tar+gzip";
+    }
     const d = new WledDevice({ url: deviceUrl });
     await d.fetchSettings();
-    await ipcRenderer.invoke("upgrade device", { deviceUrl, assetUrl });
+    await ipcRenderer.invoke("upgrade device", {
+      deviceUrl,
+      assetUrl,
+      mimeType,
+    });
 
     // check device upgraded.
     // check settings
@@ -117,7 +128,7 @@ class GlobalStore {
   }
 
   async connectDeviceToNetwork(device: Device): Promise<void> {
-    if (!this.network) return;
+    if (!(device.network && this.network)) return;
     const { ssid } = device.network;
     await ipcRenderer.invoke("connect to network", {
       ssid,
@@ -147,6 +158,7 @@ class GlobalStore {
   }
 
   async connectToDevice(device: Device): Promise<void> {
+    if (!device.network) return;
     const { ssid } = device.network;
     ipcRenderer.invoke("connect to network", {
       ssid,

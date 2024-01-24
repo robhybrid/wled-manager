@@ -2,6 +2,7 @@ import { ipcMain, app } from "electron";
 import type { IpcMainInvokeEvent } from "electron";
 import wifi from "node-wifi";
 import Bonjour from "bonjour";
+import fetch, { fileFrom } from "node-fetch";
 
 import path from "node:path";
 import fse from "fs-extra";
@@ -63,21 +64,25 @@ ipcMain.handle(
   "upgrade device",
   async (
     event,
-    { deviceUrl, assetUrl }: { deviceUrl: string; assetUrl: string }
+    {
+      deviceUrl,
+      assetUrl,
+      mimeType,
+    }: { deviceUrl: string; assetUrl: string; mimeType: string }
   ) => {
     try {
       const localFilePath = await downloadBuild({
         assetUrl,
       });
       const stat = await fs.stat(localFilePath);
-      const file = await fs.open(localFilePath); // Readable.from(createReadStream(localFilePath));
+      const body = await fileFrom(localFilePath, mimeType);
 
       fetch(path.join(deviceUrl, "update"), {
         method: "POST",
         headers: {
           "Content-length": stat.size.toString(),
         },
-        body: file.readableWebStream(),
+        body,
       });
     } catch (e) {
       console.error("upgrade device failed", e);
@@ -124,14 +129,11 @@ const downloadBuild = async ({ assetUrl }: { assetUrl: string }) => {
     },
     directory,
     onProgress: function (percentage, chunk, remainingSize) {
-      //Gets called with each chunk.
-      console.log("% ", percentage);
-      console.log("Current chunk of data: ", chunk);
-      console.log("Remaining bytes: ", remainingSize);
+      console.log("% ", percentage, "Remaining bytes: ", remainingSize);
     },
   });
 
   await downloader.download();
-  console.log();
+  console.log("download complete");
   return destination;
 };

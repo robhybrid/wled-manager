@@ -88,7 +88,10 @@ function App({ store }: AppProps) {
             <div className="selected-device">
               <h1>{device.name}</h1>
               {device.service ? (
-                <p>connected</p>
+                <iframe
+                  className="device-window"
+                  src={`http://${device.service.host}`}
+                />
               ) : (
                 <div className="actions">
                   <Button onClick={() => connectDeviceToNetwork(device)}>
@@ -100,10 +103,6 @@ function App({ store }: AppProps) {
                 </div>
               )}
 
-              <iframe
-                className="device-window"
-                src={`http://${device.service.host}`}
-              ></iframe>
               {store.releases && (
                 <BuildSelector
                   onChange={({ release, asset }) => {

@@ -3,7 +3,7 @@ import { Dropdown, Button } from "antd";
 import type { MenuProps } from "antd";
 import { AppContext } from "../App";
 import { GlobalStore } from "../globalStore";
-import { Asset, Release } from "./Releases/ReleasesStore";
+import type { Asset, Release } from "../type/github";
 
 interface Props {
   onChange: ({
@@ -38,15 +38,17 @@ const BuildSelector: React.FC<Props> = ({ onChange }) => {
       ];
     }) || [];
 
-  const onClick: MenuProps["onClick"] = ({ key }: { key: number }) => {
-    let release = releases.find((r) => r.id === Number(key));
+  const onClick: MenuProps["onClick"] = ({ key }: { key: string }) => {
+    const nKey = Number(key);
+    let release = releases.find((r) => r.id === nKey);
     let asset;
     if (!release) {
       release = releases.find((r) => {
-        asset = r.assets.find((a) => a.id === Number(key));
+        asset = r.assets.find((a) => a.id === nKey);
         return !!asset;
       });
     }
+    if (!release) throw "the release was not found?";
     onChange({ release, asset });
   };
   menuProps.onClick = onClick;

@@ -1,9 +1,9 @@
 export default class FormService {
-  data: object;
+  data: object | undefined;
   url: string;
 
   constructor({ url }: { url: string }) {
-    Object.assign(this, { url });
+    this.url = url;
   }
   parser = new DOMParser();
 
@@ -27,7 +27,8 @@ export default class FormService {
   }
   async patch(data: object) {
     await this.get();
-    Object.assign(this.data, data);
+    if (!this.data) this.data = data;
+    else Object.assign(this.data, data);
     return this.post();
   }
 }

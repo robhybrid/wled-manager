@@ -11,6 +11,7 @@ export default observer(function WifiModal({ store }: { store: GlobalStore }) {
   const [deviceName, setDeviceName] = React.useState(device?.name);
 
   const ok = action(async () => {
+    if (!(device && deviceName)) return;
     if (store.connectingDevice) return;
     device.name = deviceName;
     if (wifiPassword) store.wifiPassword = wifiPassword;
