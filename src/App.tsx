@@ -3,7 +3,7 @@ import UpdateElectron from "@/components/update";
 
 import { observer } from "mobx-react";
 import { action } from "mobx";
-import { Button, ConfigProvider, theme } from "antd";
+import { Button, ConfigProvider, theme, Tag } from "antd";
 import {
   LoadingOutlined,
   ReloadOutlined,
@@ -85,8 +85,15 @@ function App({ store }: AppProps) {
             })}
           </div>
           {device && (
-            <div className="selected-device">
+            <div className="selected-device" key={device.name}>
               <h1>{device.name}</h1>
+              {device.info && (
+                <div className="info">
+                  <Tag>{device.info.arch}</Tag>
+                  <Tag>WLED ver:{device.info?.ver}</Tag>
+                </div>
+              )}
+
               {device.service ? (
                 <iframe
                   className="device-window"
@@ -105,6 +112,7 @@ function App({ store }: AppProps) {
 
               {store.releases && (
                 <BuildSelector
+                  deviceInfo={device.info}
                   onChange={({ release, asset }) => {
                     console.log("BuildSelector onChange", { release, asset });
                     store.upgradeDevice({ release, asset, device });

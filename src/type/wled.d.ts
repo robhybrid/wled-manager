@@ -1,4 +1,4 @@
-interface info {
+export interface Info {
   arch: string;
   brand: string;
   core: string;

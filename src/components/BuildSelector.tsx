@@ -4,8 +4,10 @@ import type { MenuProps } from "antd";
 import { AppContext } from "../App";
 import { GlobalStore } from "../globalStore";
 import type { Asset, Release } from "../type/github";
+import type { Info } from "../type/wled";
 
 interface Props {
+  deviceInfo?: Info;
   onChange: ({
     asset,
     release,
@@ -14,7 +16,7 @@ interface Props {
     release: Release;
   }) => void;
 }
-const BuildSelector: React.FC<Props> = ({ onChange }) => {
+const BuildSelector: React.FC<Props> = ({ deviceInfo, onChange }) => {
   const store: GlobalStore = React.useContext(AppContext);
 
   const menuProps: MenuProps = {};
@@ -22,21 +24,21 @@ const BuildSelector: React.FC<Props> = ({ onChange }) => {
   const { releases } = store.releases;
 
   menuProps.items =
-    releases?.flatMap((release) => {
-      if (!release.assets?.length) return [];
-      return [
-        {
-          key: release.id,
-          label: release.name,
-          release: release,
-        },
-        ...release.assets.map((asset) => ({
-          key: asset.id,
-          label: asset.name,
-          asset,
-        })),
-      ];
-    }) || [];
+    releases
+      ?.flatMap((release) => {
+        if (!release.assets?.length) return [];
+        return [
+          {
+            key: release.id,
+            label: release.name,
+          },
+          ...release.assets.map((asset) => ({
+            key: asset.id,
+            label: asset.name,
+          })),
+        ];
+      })
+      .filter(deviceSpecFilter(deviceInfo)) || [];
 
   const onClick: MenuProps["onClick"] = ({ key }: { key: string }) => {
     const nKey = Number(key);
@@ -61,3 +63,11 @@ const BuildSelector: React.FC<Props> = ({ onChange }) => {
 };
 
 export default BuildSelector;
+
+function deviceSpecFilter(deviceInfo: Info | undefined) {
+  if (!deviceInfo) return () => true;
+  const arch = deviceInfo.arch.toLowerCase();
+  return ({ label }: { label: string }) =>
+    label.toLowerCase().endsWith(arch + ".bin") ||
+    label.toLowerCase().endsWith(arch + "-soundreactive.bin");
+}

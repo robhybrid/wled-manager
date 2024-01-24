@@ -4,6 +4,7 @@ import WledDevice from "./entity/WledDevice";
 // import settings from "electron-settings";
 import type { IpcRendererEvent, IpcRenderer } from "electron";
 import type { Asset, Release } from "./type/github";
+import type { Info } from "./type/wled";
 
 const { ipcRenderer } = window;
 
@@ -81,6 +82,14 @@ class GlobalStore {
         }
       })
     );
+    ipcRenderer.on(
+      "bonjour service down",
+      action((event: IpcRendererEvent, message: RemoteService) => {
+        // remove the device from the list.
+        console.log("bonjour service down", message);
+        this.deviceInfo.delete(message.fqdn);
+      })
+    );
     ipcRenderer.invoke("subscribe bonjour");
   }
 
@@ -103,12 +112,16 @@ class GlobalStore {
       mimeType = "application/tar+gzip";
     }
     const d = new WledDevice({ url: deviceUrl });
+
     await d.fetchSettings();
     await ipcRenderer.invoke("upgrade device", {
       deviceUrl,
       assetUrl,
       mimeType,
     });
+    await new Promise((r) => setTimeout(r, 2000));
+    this._bonjourServices = new Map();
+    this.subscribeBonjour();
 
     // check device upgraded.
     // check settings
@@ -206,7 +219,7 @@ export interface Device {
   name: string;
   network?: Network;
   service?: RemoteService;
-  info?: { ver: string };
+  info?: Info;
   wled?: WledDevice;
 }
 

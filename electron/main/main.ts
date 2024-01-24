@@ -2,22 +2,20 @@ import { ipcMain, app } from "electron";
 import type { IpcMainInvokeEvent } from "electron";
 import wifi from "node-wifi";
 import Bonjour from "bonjour";
-import fetch, { fileFrom } from "node-fetch";
+import fetch, { fileFrom, FormData } from "node-fetch";
 
 import path from "node:path";
 import fse from "fs-extra";
-import { createReadStream } from "node:fs";
 import fs from "node:fs/promises";
 import Downloader from "nodejs-file-downloader";
-import { Readable } from "stream";
 
 const bonjour = Bonjour();
 wifi.init({
   iface: null,
 });
 
-console.log("handle scan wifi");
 ipcMain.handle("scan wifi", async () => {
+  console.log("handle scan wifi");
   const networks = await wifi.scan();
   const current = await wifi.getCurrentConnections();
   return { networks, current };
@@ -31,6 +29,11 @@ function bonjourFind(event: IpcMainInvokeEvent) {
   if (browser) browser.stop();
   browser = bonjour.find({ type: "wled" }, (service) => {
     event.sender.send("bonjour service", service);
+  });
+
+  browser.addListener("down", (service) => {
+    console.log("bonjour service down", service);
+    event.sender.send("bonjour service down", service);
   });
   browser.addListener("error", (e) =>
     console.error("bonjour browser error", e)
@@ -74,16 +77,26 @@ ipcMain.handle(
       const localFilePath = await downloadBuild({
         assetUrl,
       });
+      const url = new URL(deviceUrl);
       const stat = await fs.stat(localFilePath);
-      const body = await fileFrom(localFilePath, mimeType);
-
-      fetch(path.join(deviceUrl, "update"), {
-        method: "POST",
+      const fileBlob = await fileFrom(localFilePath, mimeType);
+      const formData = new FormData();
+      formData.append("data", fileBlob, path.basename(localFilePath));
+      console.log("start upload");
+      const updateUrl = path.join(deviceUrl, "update");
+      await fetch(updateUrl, {
+        method: "post",
         headers: {
-          "Content-length": stat.size.toString(),
+          "Content-Length": stat.size.toString(),
+          "Content-Type": "multipart/form-data;",
+          Host: url.host,
+          Origin: deviceUrl,
+          Pragma: "no-cache",
+          Referer: updateUrl,
         },
-        body,
+        body: formData,
       });
+      console.log("upload complete", localFilePath, deviceUrl);
     } catch (e) {
       console.error("upgrade device failed", e);
     }
@@ -108,7 +121,8 @@ async function connectToDevice(ssid: string) {
 
 const downloadBuild = async ({ assetUrl }: { assetUrl: string }) => {
   const url = new URL(assetUrl);
-  const [, subPath, fileName] = url.pathname.match(/(.*)\/([^\/]+)$/) || [];
+  const subPath = path.dirname(url.pathname);
+  const fileName = path.basename(url.pathname);
   const directory = path.join(
     app.getPath("appData"),
     "WLED-Manager",
