@@ -13,7 +13,7 @@ function Networks() {
     <div className="networks">
       <Button
         loading={globalStore.scanningWifi}
-        onClick={store.toggleShowNetworks}
+        onClick={() => store.toggleShowNetworks()}
       >
         Neworks
       </Button>

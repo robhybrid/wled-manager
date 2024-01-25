@@ -3,11 +3,14 @@ import type { IpcMainInvokeEvent } from "electron";
 import wifi from "node-wifi";
 import Bonjour from "bonjour";
 import fetch, { fileFrom, FormData } from "node-fetch";
+import type http from "http";
 
 import path from "node:path";
 import fse from "fs-extra";
 import fs from "node:fs/promises";
 import Downloader from "nodejs-file-downloader";
+
+import otaUpdate from "./otaUpdate";
 
 const bonjour = Bonjour();
 wifi.init({
@@ -30,7 +33,6 @@ function bonjourFind(event: IpcMainInvokeEvent) {
   browser = bonjour.find({ type: "wled" }, (service) => {
     event.sender.send("bonjour service", service);
   });
-
   browser.addListener("down", (service) => {
     console.log("bonjour service down", service);
     event.sender.send("bonjour service down", service);
@@ -68,40 +70,79 @@ ipcMain.handle(
   async (
     event,
     {
+      deviceMac,
       deviceUrl,
       assetUrl,
       mimeType,
-    }: { deviceUrl: string; assetUrl: string; mimeType: string }
+    }: {
+      deviceMac: string;
+      deviceUrl: string;
+      assetUrl: string;
+      mimeType: string;
+    }
   ) => {
     try {
-      const localFilePath = await downloadBuild({
+      const { filepath: localFilePath, md5 } = await downloadBuild({
         assetUrl,
       });
       const url = new URL(deviceUrl);
-      const stat = await fs.stat(localFilePath);
-      const fileBlob = await fileFrom(localFilePath, mimeType);
-      const formData = new FormData();
-      formData.append("data", fileBlob, path.basename(localFilePath));
-      console.log("start upload");
-      const updateUrl = path.join(deviceUrl, "update");
-      await fetch(updateUrl, {
-        method: "post",
-        headers: {
-          "Content-Length": stat.size.toString(),
-          "Content-Type": "multipart/form-data;",
-          Host: url.host,
-          Origin: deviceUrl,
-          Pragma: "no-cache",
-          Referer: updateUrl,
-        },
-        body: formData,
+
+      const { esp, transfer } = otaUpdate({
+        filepath: localFilePath,
+        host: url.host,
+        md5,
       });
-      console.log("upload complete", localFilePath, deviceUrl);
+
+      esp.on("state", function (state: string) {
+        console.log("Current state of transfer: ", state);
+      });
+
+      event.sender.send("");
+
+      esp.on("progress", function (current: number, total: number) {
+        console.log(
+          "Transfer progress: " + Math.round((current / total) * 100) + "%"
+        );
+      });
+
+      await transfer;
+
+      return localFilePath;
     } catch (e) {
       console.error("upgrade device failed", e);
     }
   }
 );
+
+async function manualUpdate({
+  localFilePath,
+  mimeType,
+  deviceUrl,
+}: {
+  localFilePath: string;
+  mimeType: string;
+  deviceUrl: string;
+}) {
+  const url = new URL(deviceUrl);
+  const stat = await fs.stat(localFilePath);
+  const fileBlob = await fileFrom(localFilePath, mimeType);
+  const formData = new FormData();
+  formData.append("data", fileBlob, path.basename(localFilePath));
+  const updateUrl = path.join(deviceUrl, "update");
+  await fetch(updateUrl, {
+    method: "post",
+    headers: {
+      "Content-Length": stat.size.toString(),
+      "Content-Type": "multipart/form-data;",
+      Host: url.host,
+      Origin: deviceUrl,
+      Pragma: "no-cache",
+      Referer: updateUrl,
+    },
+    body: formData,
+  });
+  console.log("upload complete", localFilePath, deviceUrl);
+}
 
 async function connectToDevice(ssid: string) {
   await wifi.connect({ ssid, password: "wled1234" });
@@ -119,7 +160,11 @@ async function connectToDevice(ssid: string) {
 //   console.log(device);
 // }
 
-const downloadBuild = async ({ assetUrl }: { assetUrl: string }) => {
+const downloadBuild = async ({
+  assetUrl,
+}: {
+  assetUrl: string;
+}): Promise<{ filepath: string; md5?: string }> => {
   const url = new URL(assetUrl);
   const subPath = path.dirname(url.pathname);
   const fileName = path.basename(url.pathname);
@@ -133,8 +178,9 @@ const downloadBuild = async ({ assetUrl }: { assetUrl: string }) => {
   const destination = path.resolve(directory, fileName);
   const exsists = await fse.pathExists(destination);
   if (exsists) {
-    return destination;
+    return { filepath: destination };
   }
+  let md5;
   const downloader = new Downloader({
     url: assetUrl,
     headers: {
@@ -142,12 +188,17 @@ const downloadBuild = async ({ assetUrl }: { assetUrl: string }) => {
       Accept: "application/vnd.github.raw+json",
     },
     directory,
-    onProgress: function (percentage, chunk, remainingSize) {
+    onProgress(percentage, chunk, remainingSize) {
       console.log("% ", percentage, "Remaining bytes: ", remainingSize);
+    },
+    onResponse(r: http.IncomingMessage) {
+      md5 = r.headers["content-md5"];
     },
   });
 
   await downloader.download();
   console.log("download complete");
-  return destination;
+  // TODO: compare checksum, see:
+  // https://github.com/orgs/community/discussions/23512#discussioncomment-7856465
+  return { filepath: destination, md5 };
 };
