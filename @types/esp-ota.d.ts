@@ -15,23 +15,15 @@ class EspOTA extends EventEmitter {
 
   on(eventName: string, cb: function): void;
   setPassword(passsword: string): void;
-  async uploadFirmware(
-    filename: string,
-    address: string,
-    port = 3232
-  ): Promise<void>;
-  async uploadSPIFFS(
-    filename: string,
-    address: string,
-    port = 3232
-  ): Promise<void>;
-  async uploadFile(
+  uploadFirmware(filename: string, address: string, port = 3232): Promise<void>;
+  uploadSPIFFS(filename: string, address: string, port = 3232): Promise<void>;
+  uploadFile(
     filename: string,
     address: string,
     port = 8266,
     target = EspOTA.U_FLASH
   ): Promise<void>;
-  async uploadBuffer(
+  uploadBuffer(
     buffer: Buffer,
     address: string,
     port = 8266,
