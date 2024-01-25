@@ -3,19 +3,22 @@ import { observer } from "mobx-react";
 import { action } from "mobx";
 import { Button, Modal, Input } from "antd";
 
-import { GlobalStore } from "../../globalStore";
+import NetworkStore from "../Networks/NetworkStore";
 
-export default observer(function WifiModal({ store }: { store: GlobalStore }) {
-  const device = store.selectedDevice;
+export default observer(function WifiModal({ store }: { store: NetworkStore }) {
+  const net = store.selectedNetwork;
+  if (!net) {
+    store.wifiModalOpen = false;
+    return null;
+  }
   const [wifiPassword, setWifiPassword] = React.useState(store.wifiPassword);
-  const [deviceName, setDeviceName] = React.useState(device?.name);
+  const [deviceName, setDeviceName] = React.useState(net.ssid);
 
   const ok = action(async () => {
-    if (!(device && deviceName)) return;
+    if (!(net && deviceName)) return;
     if (store.connectingDevice) return;
-    device.name = deviceName;
     if (wifiPassword) store.wifiPassword = wifiPassword;
-    await store.connectDeviceToNetwork(device);
+    await store.connectDeviceToNetwork(net, deviceName);
     store.wifiModalOpen = false;
   });
   const cancel = action(() => {
@@ -35,7 +38,7 @@ export default observer(function WifiModal({ store }: { store: GlobalStore }) {
         }
       />
       <Input.Password
-        placeholder={`wifi password for ${store.network?.ssid}`}
+        placeholder={`wifi password for ${store.priamryNetwork?.ssid}`}
         value={wifiPassword}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setWifiPassword(e.currentTarget.value)
