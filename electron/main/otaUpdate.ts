@@ -14,6 +14,9 @@ export default function otaUpdate({
   const esp = new EspOTA(); // Optional arguments in this order: (bindAddress, bindPort, chunkSize, secondsTimeout)
 
   if (md5) {
+    // esp.filename === filepath;
+    // const md5sum = await esp.getFileInfo();
+    // if (md5 !== md5sum) throw 'corrupted binary';
   }
 
   password && esp.setPassword(password);

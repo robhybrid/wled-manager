@@ -20,6 +20,7 @@ class GlobalStore {
   connectingDevice: Promise<void> | null = null;
   deviceInfo = new Map();
   releases = new ReleasesStore();
+  colorScheme: "dark" | "light" = "dark";
 
   constructor() {
     this.subscribeBonjour();
@@ -103,22 +104,6 @@ class GlobalStore {
     // notify complete.
     // reload device window.
   }
-
-  async connectDeviceToNetworkHandle(device: Device): Promise<void> {
-    try {
-      this.connectingDevice = this.connectDeviceToNetwork(device);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      this.connectingDevice = null;
-    }
-  }
-
-  // async saveDevices() {
-  //   for (const device of this.devices) {
-  //     await ipcRenderer.invoke("save device", device);
-  //   }
-  // }
 }
 
 export { GlobalStore };

@@ -1,7 +1,7 @@
 import React from "react";
 import { observer, useLocalObservable } from "mobx-react";
-import _, { orderBy } from "lodash";
-import type { Network, Device } from "../../globalStore";
+import _ from "lodash";
+import type { Network } from "../../globalStore";
 import { WifiOutlined } from "@ant-design/icons";
 import { action } from "mobx";
 

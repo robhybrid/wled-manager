@@ -4,7 +4,7 @@
       "path": ".",
     },
     {
-      "path": "../WLED-Manager-ev",
+      "path": "../lightence-ant-design-react-template",
     },
   ],
 }
