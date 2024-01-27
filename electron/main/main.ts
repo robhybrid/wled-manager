@@ -26,11 +26,13 @@ ipcMain.handle("scan wifi", async () => {
 
 ipcMain.handle("subscribe bonjour", bonjourFind);
 ipcMain.handle("update bonjour", bonjourFind);
+
 let browser: Bonjour.Browser;
 function bonjourFind(event: IpcMainInvokeEvent) {
   console.log("bonjourFind");
   if (browser) browser.stop();
   browser = bonjour.find({ type: "wled" }, (service) => {
+    console.log("found", service);
     event.sender.send("bonjour service", service);
   });
   browser.addListener("down", (service) => {

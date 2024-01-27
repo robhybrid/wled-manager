@@ -16,12 +16,12 @@ function Networks() {
   const globalStore = React.useContext(AppContext);
   const store = useLocalObservable(() => new NetworkStore());
 
-  let { networks } = globalStore;
-  networks = _(networks)
+  let { networks } = store;
+  networks = _.chain(networks)
     .filter((n: Network) => n.frequency < 3000)
     .orderBy("quality", "desc")
     .uniqBy("ssid")
-    .values();
+    .value();
   if (!store.showNetworks) {
     networks = networks.filter(
       (n: Network) =>
@@ -70,7 +70,7 @@ function Networks() {
           </Button>
         </div>
       )}
-      <WifiModal store={store} />
+      <WifiModal store={store} key={store.selectedNetwork?.ssid} />
     </div>
   );
 }
