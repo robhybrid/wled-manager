@@ -15,10 +15,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "traceResolution": true,
     "paths": {
       "src/*": ["./src/*"],
-      "@app/*": ["./src/*", "../lightence-ant-design-react-template/src/*"],
-      "@/*": ["./src/*"],
     },
     "typeRoots": ["./@types", "node_modules/@types"],
   },

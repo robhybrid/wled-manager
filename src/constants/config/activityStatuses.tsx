@@ -1,31 +1,31 @@
-import React from 'react';
-import { DollarOutlined, PlusOutlined, ReadOutlined } from '@ant-design/icons';
-import { ActivityStatusType } from '@app/interfaces/interfaces';
+import React from "react";
+import { DollarOutlined, PlusOutlined, ReadOutlined } from "@ant-design/icons";
+import { ActivityStatusType } from "/src/interfaces/interfaces";
 
 interface ActivityStatusItem {
   name: ActivityStatusType;
   title: string;
-  color: 'success' | 'warning' | 'secondary';
+  color: "success" | "warning" | "secondary";
   icon: React.ReactNode;
 }
 
 export const activityStatuses: ActivityStatusItem[] = [
   {
-    name: 'sold',
-    title: 'nft.status.sold',
-    color: 'success',
+    name: "sold",
+    title: "nft.status.sold",
+    color: "success",
     icon: <DollarOutlined />,
   },
   {
-    name: 'added',
-    title: 'nft.status.added',
-    color: 'warning',
+    name: "added",
+    title: "nft.status.added",
+    color: "warning",
     icon: <PlusOutlined />,
   },
   {
-    name: 'booked',
-    title: 'nft.status.booked',
-    color: 'secondary',
+    name: "booked",
+    title: "nft.status.booked",
+    color: "secondary",
     icon: <ReadOutlined />,
   },
 ];

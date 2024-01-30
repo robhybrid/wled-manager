@@ -1,8 +1,8 @@
-import styled from 'styled-components';
-import { BaseButton } from '@app/components/common/BaseButton/BaseButton';
-import { media } from '@app/styles/themes/constants';
-import { BaseDivider } from '@app/components/common/BaseDivider/BaseDivider';
-import { BaseTypography } from '@app/components/common/BaseTypography/BaseTypography';
+import styled from "styled-components";
+import { BaseButton } from "/src/components/common/BaseButton/BaseButton";
+import { media } from "/src/styles/themes/constants";
+import { BaseDivider } from "/src/components/common/BaseDivider/BaseDivider";
+import { BaseTypography } from "/src/components/common/BaseTypography/BaseTypography";
 
 export const NoticesOverlayMenu = styled.div`
   max-width: 15rem;

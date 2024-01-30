@@ -1,5 +1,9 @@
-import { BREAKPOINTS, media } from '@app/styles/themes/constants';
-import { MediaQueryAllQueryable, MediaQueryMatchers, useMediaQuery } from 'react-responsive';
+import { BREAKPOINTS, media } from "/src/styles/themes/constants";
+import {
+  MediaQueryAllQueryable,
+  MediaQueryMatchers,
+  useMediaQuery,
+} from "react-responsive";
 
 interface ResponsiveReturnValues {
   isMobile: boolean;
@@ -12,7 +16,7 @@ interface ResponsiveReturnValues {
   useMediaQuery: (
     settings: Partial<MediaQueryAllQueryable & { query?: string | undefined }>,
     device?: MediaQueryMatchers,
-    callback?: (matches: boolean) => void,
+    callback?: (matches: boolean) => void
   ) => boolean;
 }
 

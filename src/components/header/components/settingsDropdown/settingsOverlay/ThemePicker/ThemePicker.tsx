@@ -1,9 +1,9 @@
-import React from 'react';
-import { MoonSunSwitch } from '@app/components/common/MoonSunSwitch/MoonSunSwitch';
-import { ThemeType } from '@app/interfaces/interfaces';
-import { useAppDispatch, useAppSelector } from '@app/hooks/reduxHooks';
-import { setTheme } from '@app/store/slices/themeSlice';
-import { setNightMode } from '@app/store/slices/nightModeSlice';
+import React from "react";
+import { MoonSunSwitch } from "/src/components/common/MoonSunSwitch/MoonSunSwitch";
+import { ThemeType } from "/src/interfaces/interfaces";
+import { useAppDispatch, useAppSelector } from "/src/hooks/reduxHooks";
+import { setTheme } from "/src/store/slices/themeSlice";
+import { setNightMode } from "/src/store/slices/nightModeSlice";
 
 export const ThemePicker: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -16,9 +16,9 @@ export const ThemePicker: React.FC = () => {
 
   return (
     <MoonSunSwitch
-      isMoonActive={theme === 'dark'}
-      onClickMoon={() => handleClickButton('dark')}
-      onClickSun={() => handleClickButton('light')}
+      isMoonActive={theme === "dark"}
+      onClickMoon={() => handleClickButton("dark")}
+      onClickSun={() => handleClickButton("light")}
     />
   );
 };

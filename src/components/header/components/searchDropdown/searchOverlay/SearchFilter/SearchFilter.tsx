@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { categoriesList, CategoryType } from 'constants/categoriesList';
-import { CategoryComponents } from '@app/components/header/components/HeaderSearch/HeaderSearch';
-import * as S from './SearchFilter.styles';
-import { BaseCol } from '@app/components/common/BaseCol/BaseCol';
-import { BaseRow } from '@app/components/common/BaseRow/BaseRow';
+import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { categoriesList, CategoryType } from "constants/categoriesList";
+import { CategoryComponents } from "/src/components/header/components/HeaderSearch/HeaderSearch";
+import * as S from "./SearchFilter.styles";
+import { BaseCol } from "/src/components/common/BaseCol/BaseCol";
+import { BaseRow } from "/src/components/common/BaseRow/BaseRow";
 
 interface SearchFilterProps {
   data: CategoryComponents[] | null;
@@ -12,9 +12,15 @@ interface SearchFilterProps {
   children: (filteredResults: CategoryComponents[]) => React.ReactNode;
 }
 
-export const SearchFilter: React.FC<SearchFilterProps> = ({ data, isOpen, children }) => {
+export const SearchFilter: React.FC<SearchFilterProps> = ({
+  data,
+  isOpen,
+  children,
+}) => {
   const [selectedFilter, setSelectedFilter] = useState<CategoryType[]>([]);
-  const [filteredResults, setFilteredResults] = useState<CategoryComponents[] | null>(data);
+  const [filteredResults, setFilteredResults] = useState<
+    CategoryComponents[] | null
+  >(data);
 
   const { t } = useTranslation();
 
@@ -27,13 +33,17 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({ data, isOpen, childr
           </S.CheckBox>
         </BaseCol>
       )),
-    [t],
+    [t]
   );
 
   useEffect(() => {
     if (data) {
       if (selectedFilter.length > 0) {
-        setFilteredResults(data.filter((component) => selectedFilter.some((filter) => filter === component.category)));
+        setFilteredResults(
+          data.filter((component) =>
+            selectedFilter.some((filter) => filter === component.category)
+          )
+        );
       } else {
         setFilteredResults(data);
       }
@@ -45,7 +55,11 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({ data, isOpen, childr
   return (
     <>
       <S.FilterWrapper isOpen={isOpen}>
-        <S.CheckboxGroup onChange={(checkedValues) => setSelectedFilter(checkedValues as CategoryType[])}>
+        <S.CheckboxGroup
+          onChange={(checkedValues) =>
+            setSelectedFilter(checkedValues as CategoryType[])
+          }
+        >
           <BaseRow>{filterElements}</BaseRow>
         </S.CheckboxGroup>
       </S.FilterWrapper>

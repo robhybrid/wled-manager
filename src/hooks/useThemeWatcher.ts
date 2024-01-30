@@ -1,20 +1,20 @@
-import { useEffect, useRef } from 'react';
-import { useAppSelector } from './reduxHooks';
-import { ConfigProvider } from 'antd';
-import { themeObject } from '@app/styles/themes/themeVariables';
+import { useEffect, useRef } from "react";
+import { useAppSelector } from "./reduxHooks";
+import { ConfigProvider } from "antd";
+import { themeObject } from "/src/styles/themes/themeVariables";
 
 export const useThemeWatcher = (): void => {
   const theme = useAppSelector((state) => state.theme.theme);
-  const root = useRef(document.querySelector(':root'));
+  const root = useRef(document.querySelector(":root"));
 
   useEffect(() => {
     const html = root.current;
     if (html) {
-      html.setAttribute('data-no-transition', '');
-      html.setAttribute('data-theme', theme);
+      html.setAttribute("data-no-transition", "");
+      html.setAttribute("data-theme", theme);
       // remove transition after layout update
       requestAnimationFrame(() => {
-        html.removeAttribute('data-no-transition');
+        html.removeAttribute("data-no-transition");
       });
     }
 

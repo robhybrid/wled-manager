@@ -4,30 +4,17 @@ import UpdateElectron from "@/components/update";
 import { observer } from "mobx-react";
 import { action } from "mobx";
 import { Button, ConfigProvider, theme, Tag } from "antd";
-import {
-  LoadingOutlined,
-  ReloadOutlined,
-  WifiOutlined,
-} from "@ant-design/icons";
-
-import globalStore, { GlobalStore, Device } from "../globalStore";
+import { AppContext } from "src/App";
 
 import Networks from "../components/Networks";
 import "../App.scss";
 import BuildSelector from "./BuildSelector";
-
-export const AppContext = React.createContext(globalStore);
-export { GlobalStore };
+import { Device } from "src/globalStore";
 
 const themeAlgorithm = theme.darkAlgorithm;
 
-interface AppProps {
-  store: GlobalStore;
-}
-
-function App({ store }: AppProps) {
-  const [count, setCount] = useState(0);
-
+function App() {
+  const store = React.useContext(AppContext);
   const selectDevice = action((device: Device) => {
     store.selectedDevice = device;
   });

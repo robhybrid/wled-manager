@@ -1,6 +1,6 @@
-import { BaseTypography } from '@app/components/common/BaseTypography/BaseTypography';
-import { media } from '@app/styles/themes/constants';
-import styled from 'styled-components';
+import { BaseTypography } from "/src/components/common/BaseTypography/BaseTypography";
+import { media } from "/src/styles/themes/constants";
+import styled from "styled-components";
 
 export const SearchResultsWrapper = styled.div`
   & > div {

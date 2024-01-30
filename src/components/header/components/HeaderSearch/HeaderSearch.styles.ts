@@ -1,9 +1,9 @@
-import styled from 'styled-components';
-import { SearchOutlined } from '@ant-design/icons';
-import { BaseModal } from '@app/components/common/BaseModal/BaseModal';
-import { BaseButton } from '@app/components/common/BaseButton/BaseButton';
-import { SearchInput } from 'components/common/inputs/SearchInput/SearchInput';
-import { BORDER_RADIUS, media } from '@app/styles/themes/constants';
+import styled from "styled-components";
+import { SearchOutlined } from "@ant-design/icons";
+import { BaseModal } from "/src/components/common/BaseModal/BaseModal";
+import { BaseButton } from "/src/components/common/BaseButton/BaseButton";
+import { SearchInput } from "components/common/inputs/SearchInput/SearchInput";
+import { BORDER_RADIUS, media } from "/src/styles/themes/constants";
 
 export const SearchIcon = styled(SearchOutlined)`
   &.anticon.anticon-search {

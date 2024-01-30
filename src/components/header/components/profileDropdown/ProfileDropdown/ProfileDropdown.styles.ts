@@ -1,7 +1,7 @@
-import { DownOutlined } from '@ant-design/icons';
-import { media } from '@app/styles/themes/constants';
-import styled from 'styled-components';
-import { HeaderActionWrapper } from '../../../Header.styles';
+import { DownOutlined } from "@ant-design/icons";
+import { media } from "/src/styles/themes/constants";
+import styled from "styled-components";
+import { HeaderActionWrapper } from "../../../Header.styles";
 
 export const ProfileDropdownHeader = styled(HeaderActionWrapper)`
   cursor: pointer;

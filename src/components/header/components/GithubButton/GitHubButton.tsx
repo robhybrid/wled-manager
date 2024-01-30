@@ -1,9 +1,9 @@
-import React from 'react';
-import { GithubOutlined } from '@ant-design/icons';
-import styled from 'styled-components';
-import { useAppSelector } from '@app/hooks/reduxHooks';
-import { BASE_COLORS } from '@app/styles/themes/constants';
-import { BaseButton as BaseButton } from '@app/components/common/BaseButton/BaseButton';
+import React from "react";
+import { GithubOutlined } from "@ant-design/icons";
+import styled from "styled-components";
+import { useAppSelector } from "/src/hooks/reduxHooks";
+import { BASE_COLORS } from "/src/styles/themes/constants";
+import { BaseButton as BaseButton } from "/src/components/common/BaseButton/BaseButton";
 
 export const GitHubButton: React.FC = (props) => {
   const theme = useAppSelector((state) => state.theme.theme);
@@ -14,7 +14,7 @@ export const GitHubButton: React.FC = (props) => {
       href="https://github.com/altence/lightence-admin"
       icon={<GithubIcon />}
       target="_blank"
-      $isDark={theme === 'dark'}
+      $isDark={theme === "dark"}
       {...props}
     >
       GitHub
@@ -23,8 +23,8 @@ export const GitHubButton: React.FC = (props) => {
 };
 
 const Button = styled(BaseButton)<{ $isDark: boolean }>`
-  color: ${(props) => BASE_COLORS[props.$isDark ? 'white' : 'black']};
-  background: ${(props) => BASE_COLORS[props.$isDark ? 'black' : 'white']};
+  color: ${(props) => BASE_COLORS[props.$isDark ? "white" : "black"]};
+  background: ${(props) => BASE_COLORS[props.$isDark ? "black" : "white"]};
   border-radius: 50px;
   padding-top: 0;
   padding-bottom: 0;
@@ -34,8 +34,8 @@ const Button = styled(BaseButton)<{ $isDark: boolean }>`
   &:hover,
   &:active,
   &:focus {
-    color: ${(props) => BASE_COLORS[props.$isDark ? 'black' : 'white']};
-    background: ${(props) => BASE_COLORS[props.$isDark ? 'white' : 'black']};
+    color: ${(props) => BASE_COLORS[props.$isDark ? "black" : "white"]};
+    background: ${(props) => BASE_COLORS[props.$isDark ? "white" : "black"]};
   }
 `;
 

@@ -1,14 +1,14 @@
-import styled, { css } from 'styled-components';
-import { BurgerIcon } from '@app/components/common/Burger/BurgerIcon';
-import { GitHubButton } from '@app/components/header/components/GithubButton/GitHubButton';
-import { LAYOUT, media } from '@app/styles/themes/constants';
-import { BaseCollapse } from '../common/BaseCollapse/BaseCollapse';
-import { BaseCol } from '../common/BaseCol/BaseCol';
+import styled, { css } from "styled-components";
+import { BurgerIcon } from "/src/components/common/Burger/BurgerIcon";
+import { GitHubButton } from "/src/components/header/components/GithubButton/GitHubButton";
+import { LAYOUT, media } from "/src/styles/themes/constants";
+import { BaseCollapse } from "../common/BaseCollapse/BaseCollapse";
+import { BaseCol } from "../common/BaseCol/BaseCol";
 
 export const HeaderActionWrapper = styled.div`
   cursor: pointer;
 
-  & > .ant-btn > span[role='img'],
+  & > .ant-btn > span[role="img"],
   .ant-badge {
     font-size: 1.25rem;
 
@@ -37,7 +37,7 @@ export const DropdownCollapse = styled(BaseCollapse)`
   & > .ant-collapse-item-disabled > .ant-collapse-header {
     cursor: default;
 
-    & > span[role='img'] {
+    & > span[role="img"] {
       display: none;
     }
   }
@@ -75,7 +75,8 @@ export const ProfileColumn = styled(BaseCol)<ProfileColumn>`
       props?.$isTwoColumnsLayout &&
       css`
         background-color: var(--sider-background-color);
-        padding: ${LAYOUT.desktop.paddingVertical} ${LAYOUT.desktop.paddingHorizontal};
+        padding: ${LAYOUT.desktop.paddingVertical}
+          ${LAYOUT.desktop.paddingHorizontal};
       `}
   }
 `;

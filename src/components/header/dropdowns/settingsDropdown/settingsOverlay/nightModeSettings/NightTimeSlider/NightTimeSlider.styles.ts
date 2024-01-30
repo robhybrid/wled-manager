@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import { InputNumber } from '@app/components/common/inputs/InputNumber/InputNumber';
-import { FONT_SIZE, FONT_WEIGHT } from '@app/styles/themes/constants';
-import { BaseTypography } from '@app/components/common/BaseTypography/BaseTypography';
+import styled from "styled-components";
+import { InputNumber } from "/src/components/common/inputs/InputNumber/InputNumber";
+import { FONT_SIZE, FONT_WEIGHT } from "/src/styles/themes/constants";
+import { BaseTypography } from "/src/components/common/BaseTypography/BaseTypography";
 
 const pathWidth = 22;
 
@@ -43,7 +43,9 @@ export const BackgroundWrapper = styled(InnerWrapper)`
 `;
 
 export const ShadowWrapper = styled(InnerWrapper)`
-  box-shadow: 0px -4px 16px rgba(1, 80, 154, 0.1), 0px 4px 16px rgba(1, 80, 154, 0.1);
+  box-shadow:
+    0px -4px 16px rgba(1, 80, 154, 0.1),
+    0px 4px 16px rgba(1, 80, 154, 0.1);
   z-index: 2; // To make it under slider
 `;
 

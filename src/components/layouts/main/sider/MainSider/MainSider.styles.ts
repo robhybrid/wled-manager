@@ -1,9 +1,9 @@
-import styled, { css } from 'styled-components';
-import { Link } from 'react-router-dom';
-import { media } from '@app/styles/themes/constants';
-import { LAYOUT } from '@app/styles/themes/constants';
-import { BaseButton } from '@app/components/common/BaseButton/BaseButton';
-import { BaseLayout } from '@app/components/common/BaseLayout/BaseLayout';
+import styled, { css } from "styled-components";
+import { Link } from "react-router-dom";
+import { media } from "/src/styles/themes/constants";
+import { LAYOUT } from "/src/styles/themes/constants";
+import { BaseButton } from "/src/components/common/BaseButton/BaseButton";
+import { BaseLayout } from "/src/components/common/BaseLayout/BaseLayout";
 
 export const Sider = styled(BaseLayout.Sider)`
   position: fixed;

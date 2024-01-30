@@ -1,6 +1,6 @@
-import styled, { css } from 'styled-components';
-import { LAYOUT, media } from '@app/styles/themes/constants';
-import { BaseLayout } from '@app/components/common/BaseLayout/BaseLayout';
+import styled, { css } from "styled-components";
+import { LAYOUT, media } from "/src/styles/themes/constants";
+import { BaseLayout } from "/src/components/common/BaseLayout/BaseLayout";
 
 interface HeaderProps {
   $isTwoColumnsLayout: boolean;
@@ -14,7 +14,8 @@ export default styled(BaseLayout.Content)<HeaderProps>`
   justify-content: space-between;
 
   @media only screen and ${media.md} {
-    padding: ${LAYOUT.desktop.paddingVertical} ${LAYOUT.desktop.paddingHorizontal};
+    padding: ${LAYOUT.desktop.paddingVertical}
+      ${LAYOUT.desktop.paddingHorizontal};
   }
 
   @media only screen and ${media.xl} {

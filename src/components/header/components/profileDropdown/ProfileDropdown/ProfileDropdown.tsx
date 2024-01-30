@@ -1,12 +1,12 @@
-import React from 'react';
-import { ProfileOverlay } from '../ProfileOverlay/ProfileOverlay';
-import { useAppSelector } from '@app/hooks/reduxHooks';
-import { useResponsive } from '@app/hooks/useResponsive';
-import * as S from './ProfileDropdown.styles';
-import { BasePopover } from '@app/components/common/BasePopover/BasePopover';
-import { BaseCol } from '@app/components/common/BaseCol/BaseCol';
-import { BaseRow } from '@app/components/common/BaseRow/BaseRow';
-import { BaseAvatar } from '@app/components/common/BaseAvatar/BaseAvatar';
+import React from "react";
+import { ProfileOverlay } from "../ProfileOverlay/ProfileOverlay";
+import { useAppSelector } from "/src/hooks/reduxHooks";
+import { useResponsive } from "/src/hooks/useResponsive";
+import * as S from "./ProfileDropdown.styles";
+import { BasePopover } from "/src/components/common/BasePopover/BasePopover";
+import { BaseCol } from "/src/components/common/BaseCol/BaseCol";
+import { BaseRow } from "/src/components/common/BaseRow/BaseRow";
+import { BaseAvatar } from "/src/components/common/BaseAvatar/BaseAvatar";
 
 export const ProfileDropdown: React.FC = () => {
   const { isTablet } = useResponsive();

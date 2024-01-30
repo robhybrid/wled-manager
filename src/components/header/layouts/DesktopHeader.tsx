@@ -1,18 +1,20 @@
-import React from 'react';
-import { NotificationsDropdown } from '../components/notificationsDropdown/NotificationsDropdown';
-import { ProfileDropdown } from '../components/profileDropdown/ProfileDropdown/ProfileDropdown';
-import { HeaderSearch } from '../components/HeaderSearch/HeaderSearch';
-import { SettingsDropdown } from '../components/settingsDropdown/SettingsDropdown';
-import { HeaderFullscreen } from '../components/HeaderFullscreen/HeaderFullscreen';
-import * as S from '../Header.styles';
-import { BaseRow } from '@app/components/common/BaseRow/BaseRow';
-import { BaseCol } from '@app/components/common/BaseCol/BaseCol';
+import React from "react";
+import { NotificationsDropdown } from "../components/notificationsDropdown/NotificationsDropdown";
+import { ProfileDropdown } from "../components/profileDropdown/ProfileDropdown/ProfileDropdown";
+import { HeaderSearch } from "../components/HeaderSearch/HeaderSearch";
+import { SettingsDropdown } from "../components/settingsDropdown/SettingsDropdown";
+import { HeaderFullscreen } from "../components/HeaderFullscreen/HeaderFullscreen";
+import * as S from "../Header.styles";
+import { BaseRow } from "/src/components/common/BaseRow/BaseRow";
+import { BaseCol } from "/src/components/common/BaseCol/BaseCol";
 
 interface DesktopHeaderProps {
   isTwoColumnsLayout: boolean;
 }
 
-export const DesktopHeader: React.FC<DesktopHeaderProps> = ({ isTwoColumnsLayout }) => {
+export const DesktopHeader: React.FC<DesktopHeaderProps> = ({
+  isTwoColumnsLayout,
+}) => {
   const leftSide = isTwoColumnsLayout ? (
     <S.SearchColumn xl={16} xxl={17}>
       <BaseRow justify="space-between">

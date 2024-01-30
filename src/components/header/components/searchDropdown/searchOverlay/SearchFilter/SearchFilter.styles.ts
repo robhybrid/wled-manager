@@ -1,6 +1,6 @@
-import { BaseCheckbox } from '@app/components/common/BaseCheckbox/BaseCheckbox';
-import { media } from '@app/styles/themes/constants';
-import styled, { css } from 'styled-components';
+import { BaseCheckbox } from "/src/components/common/BaseCheckbox/BaseCheckbox";
+import { media } from "/src/styles/themes/constants";
+import styled, { css } from "styled-components";
 
 interface FilterWrapperProps {
   isOpen: boolean;

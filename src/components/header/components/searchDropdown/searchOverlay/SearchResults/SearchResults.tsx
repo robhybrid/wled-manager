@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
-import { HashLink } from 'react-router-hash-link';
-import { useTranslation } from 'react-i18next';
-import { CategoryComponents } from '@app/components/header/components/HeaderSearch/HeaderSearch';
-import { camelize } from '@app/utils/utils';
-import * as S from './SearchResults.styles';
-import { BaseList } from '@app/components/common/BaseList/BaseList';
+import React, { useMemo } from "react";
+import { HashLink } from "react-router-hash-link";
+import { useTranslation } from "react-i18next";
+import { CategoryComponents } from "/src/components/header/components/HeaderSearch/HeaderSearch";
+import { camelize } from "/src/utils/utils";
+import * as S from "./SearchResults.styles";
+import { BaseList } from "/src/components/common/BaseList/BaseList";
 
 interface SearchResultsProps {
   results: CategoryComponents[];
@@ -30,7 +30,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ results }) => {
           )}
         />
       )),
-    [results, t],
+    [results, t]
   );
 
   return <S.SearchResultsWrapper>{resultsList}</S.SearchResultsWrapper>;

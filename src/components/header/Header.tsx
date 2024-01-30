@@ -1,7 +1,7 @@
-import React from 'react';
-import { DesktopHeader } from './layouts/DesktopHeader';
-import { MobileHeader } from './layouts/MobileHeader';
-import { useResponsive } from '@app/hooks/useResponsive';
+import React from "react";
+import { DesktopHeader } from "./layouts/DesktopHeader";
+import { MobileHeader } from "./layouts/MobileHeader";
+import { useResponsive } from "/src/hooks/useResponsive";
 
 interface HeaderProps {
   toggleSider: () => void;
@@ -9,7 +9,11 @@ interface HeaderProps {
   isTwoColumnsLayout: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ toggleSider, isSiderOpened, isTwoColumnsLayout }) => {
+export const Header: React.FC<HeaderProps> = ({
+  toggleSider,
+  isSiderOpened,
+  isTwoColumnsLayout,
+}) => {
   const { isTablet } = useResponsive();
 
   return isTablet ? (

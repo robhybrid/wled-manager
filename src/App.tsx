@@ -6,7 +6,7 @@ import { themeObject } from "./styles/themes/themeVariables";
 import type { GlobalStore } from "./globalStore";
 import globalStore from "./globalStore";
 
-import POC from "./components/POC";
+import MainLayout from "./components/layouts/main";
 
 export const AppContext = React.createContext(globalStore);
 
@@ -18,7 +18,7 @@ const App: React.FC<{ store: GlobalStore }> = ({ store }) => {
         content={themeObject[store.colorScheme].primary}
       />
       <GlobalStyle />
-      <POC store={store} />
+      <MainLayout />
     </AppContext.Provider>
   );
 };
