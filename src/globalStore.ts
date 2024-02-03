@@ -9,6 +9,7 @@ import type { Info } from "./type/wled";
 const { ipcRenderer } = window;
 
 class GlobalStore {
+  route: string = "networks";
   networks: Network[] = [];
   currentNetworks: Network[] = [];
   network?: Network;
@@ -27,6 +28,8 @@ class GlobalStore {
     this.scanWifi();
     this.subscribeBonjour();
   }
+
+  setRoute = action((r: string) => (this.route = r));
 
   get devices(): Device[] {
     const networks = this.networks
@@ -61,7 +64,6 @@ class GlobalStore {
     if (current.length) {
       this.network = current[0];
       await this.updateBonjour();
-      await this.releases?.fetch();
     }
   }
 

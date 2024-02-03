@@ -1,35 +1,28 @@
 import React from "react";
 import { observer } from "mobx-react";
-
-import { Button } from "antd";
-
-import { AppContext, GlobalStore } from "@/App";
+import { AppContext } from "@/App";
 import NetworkStore from "./NetworkStore";
+import _ from "lodash";
+import DataTableView from "../DataTable/DataTable";
+import Wifi from "../Wifi";
+import WifiModal from "../WifiModal/WifiModal";
 
 function Networks() {
   const globalStore = React.useContext(AppContext);
   const store = React.useMemo(() => new NetworkStore(), []);
+
+  const records = _.uniqBy(globalStore.networks, "ssid").map((network) => {
+    const connected = globalStore.currentNetworks.find(
+      (n) => n.ssid === network.ssid
+    );
+    return { ...network, connected };
+  });
+
   return (
     <div className="networks">
-      <Button
-        loading={globalStore.scanningWifi}
-        onClick={() => store.toggleShowNetworks()}
-      >
-        Neworks
-      </Button>
-      {store.showNetworks &&
-        [...new Set(globalStore.networks.map((n) => n.ssid))].map((ssid) => (
-          <div
-            key={ssid}
-            className={
-              globalStore.currentNetworks.find((n) => n.ssid === ssid)
-                ? "connected"
-                : ""
-            }
-          >
-            ssid: {ssid}
-          </div>
-        ))}
+      <Wifi />
+      <WifiModal store={store} />
+      <DataTableView records={records} idKey="ssid" />
     </div>
   );
 }

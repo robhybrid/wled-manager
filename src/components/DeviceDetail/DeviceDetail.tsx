@@ -1,9 +1,10 @@
 import React from "react";
-import { Button } from "antd";
+import { Button, Tag, Space } from "antd";
 import { AppContext } from "@/App";
 import BuildSelector from "../BuildSelector";
 import { action } from "mobx";
 import type { Device } from "@/globalStore";
+import "./DeviceDetail.scss";
 
 function DeviceDetail() {
   const store = React.useContext(AppContext);
@@ -24,13 +25,13 @@ function DeviceDetail() {
 
   if (!device) return null;
   return (
-    <div className="selected-device" key={device.name}>
+    <div className="selected-device device-detail" key={device.name}>
       <h1>{device.name}</h1>
       {device.info && (
-        <div className="info">
+        <Space className="info">
           <Tag>{device.info.arch}</Tag>
           <Tag>WLED ver:{device.info?.ver}</Tag>
-        </div>
+        </Space>
       )}
 
       {device.service ? (

@@ -12,7 +12,6 @@ function Wifi() {
         ssid: {store.network?.ssid || "scan"}
         <WifiOutlined />
       </Button>
-      <Networks />
     </div>
   );
 }
