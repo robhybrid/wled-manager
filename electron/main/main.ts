@@ -11,6 +11,8 @@ import fs from "node:fs/promises";
 import Downloader from "nodejs-file-downloader";
 
 import otaUpdate from "./otaUpdate";
+import networkStore from "./store/networkStore";
+import userStore from "./store/userStore";
 
 const bonjour = Bonjour();
 wifi.init({
@@ -46,24 +48,31 @@ ipcMain.handle("connect to device", async (event, ssid) => {
   return connectToDevice(ssid);
 });
 
-ipcMain.handle("connect to network", async (event, { ssid, password }) => {
-  await wifi.connect({ ssid, password });
-  let failed = false;
-  let connection;
-  const timeout = setTimeout(() => {
-    failed = true;
-  }, 30 * 1000);
-  while (!connection) {
-    await new Promise((r) => setTimeout(r, 1000));
-    const connections = await wifi.getCurrentConnections();
-    connection = connections.find((c) => c.ssid === ssid);
-    if (connection) {
-      clearTimeout(timeout);
-      return connection;
+ipcMain.handle(
+  "connect to network",
+  async (event, { ssid, password, save }) => {
+    await wifi.connect({ ssid, password });
+    let failed = false;
+    let connection;
+    const timeout = setTimeout(() => {
+      failed = true;
+    }, 30 * 1000);
+    while (!connection) {
+      await new Promise((r) => setTimeout(r, 1000));
+      const connections = await wifi.getCurrentConnections();
+      connection = connections.find((c) => c.ssid === ssid);
+      if (connection) {
+        clearTimeout(timeout);
+        if (save) {
+          await networkStore.save(ssid, password);
+          userStore.set("prefs.saveNetworks", true);
+        }
+        return connection;
+      }
+      if (failed) throw new Error(`WIFI connection to ${ssid} failed`);
     }
-    if (failed) throw new Error(`WIFI connection to ${ssid} failed`);
   }
-});
+);
 
 ipcMain.handle(
   "upgrade device",
